@@ -1,0 +1,50 @@
+{% extends "layout_new.html" %}
+{% block title %}설비 제원현황 - Facil-ERP{% endblock %}
+{% block page_title %}설비 제원현황{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+    <h3 class="text-lg font-bold mb-6">설비 제원 대장</h3>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="border-b border-slate-200 bg-slate-50">
+                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase">관리번호</th>
+                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase">설비명</th>
+                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase">모델명</th>
+                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase">제조사</th>
+                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase">설치일자</th>
+                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase">전원사양</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                <tr class="hover:bg-slate-50">
+                    <td class="px-6 py-4 text-sm text-slate-500">F-001</td>
+                    <td class="px-6 py-4 text-sm font-bold text-slate-800">사출성형기 1호</td>
+                    <td class="px-6 py-4 text-sm text-slate-600">HJ-2000</td>
+                    <td class="px-6 py-4 text-sm text-slate-600">현대정밀</td>
+                    <td class="px-6 py-4 text-sm text-slate-600">2020-05-15</td>
+                    <td class="px-6 py-4 text-sm text-slate-600">380V / 50kW</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                    <td class="px-6 py-4 text-sm text-slate-500">F-002</td>
+                    <td class="px-6 py-4 text-sm font-bold text-slate-800">사출성형기 2호</td>
+                    <td class="px-6 py-4 text-sm text-slate-600">HJ-2500</td>
+                    <td class="px-6 py-4 text-sm text-slate-600">현대정밀</td>
+                    <td class="px-6 py-4 text-sm text-slate-600">2021-02-10</td>
+                    <td class="px-6 py-4 text-sm text-slate-600">380V / 60kW</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                    <td class="px-6 py-4 text-sm text-slate-500">F-003</td>
+                    <td class="px-6 py-4 text-sm font-bold text-slate-800">공기 압축기</td>
+                    <td class="px-6 py-4 text-sm text-slate-600">AC-500</td>
+                    <td class="px-6 py-4 text-sm text-slate-600">한신</td>
+                    <td class="px-6 py-4 text-sm text-slate-600">2019-11-20</td>
+                    <td class="px-6 py-4 text-sm text-slate-600">220V / 20kW</td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

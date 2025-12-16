@@ -1,0 +1,121 @@
+{% extends "layout_new.html" %}
+{% block title %}새 일지 작성 - Facil-ERP{% endblock %}
+{% block page_title %}업무관리 &gt; 일일업무 &gt; 새 일지 작성{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('add_daily_log') }}" method="post" id="daily-log-form">
+    <div class="flex flex-col items-center">
+        <!-- Toolbar -->
+        <div class="w-full max-w-[210mm] flex justify-between items-center mb-4">
+            <a href="{{ url_for('work_daily') }}" class="flex items-center gap-2 bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded shadow-sm hover:bg-slate-50 text-sm font-bold">
+                <i data-lucide="list" class="w-4 h-4"></i> 목록
+            </a>
+            <button type="submit" class="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded shadow hover:bg-indigo-700 text-sm font-bold">
+                <i data-lucide="save" class="w-4 h-4"></i> 저장
+            </button>
+        </div>
+
+        <!-- A4 Paper Form Container -->
+        <div class="bg-white w-full max-w-[210mm] min-h-[297mm] shadow-lg border border-slate-300 p-[15mm] relative text-black">
+            <!-- Title -->
+            <h1 class="text-3xl font-bold text-center mb-8 underline decoration-2 underline-offset-4">
+                유지보수 수행 일지
+            </h1>
+
+            <!-- Top Section: Date & Signature -->
+            <div class="flex justify-between items-end mb-4">
+                <div class="text-lg font-bold mb-2 flex items-center">
+                    <input type="date" id="work_date" name="work_date" required class="border-b border-black focus:outline-none focus:border-blue-500 px-1 bg-transparent">
+                </div>
+                <table class="border-collapse border border-black w-32 text-center">
+                    <tbody>
+                        <tr>
+                            <td class="bg-gray-100 border border-black p-1 font-bold text-sm">담 당</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-black h-16 align-middle cursor-pointer hover:bg-gray-50 text-gray-400 text-xs">(인)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Main Table Content -->
+            <div class="border-2 border-black">
+                <div class="flex border-b-2 border-black bg-gray-100 text-center font-bold">
+                    <div class="w-[10%] py-2 border-r border-black">시간</div>
+                    <div class="w-[15%] py-2 border-r border-black">업무구분</div>
+                    <div class="w-[25%] py-2 border-r border-black">업무처리내용</div>
+                    <div class="w-[20%] py-2 border-r border-black">업무처리결과</div>
+                    <div class="w-[15%] py-2 border-r border-black">향후일정</div>
+                    <div class="w-[15%] py-2">비고</div>
+                </div>
+
+                <div id="task-list" class="divide-y divide-black">
+                    <!-- JS will insert rows here -->
+                </div>
+            </div>
+             <button type="button" id="add-row-btn" class="w-full mt-2 border-2 border-dashed border-slate-300 text-slate-500 py-2 rounded-lg hover:bg-slate-50 flex items-center justify-center gap-2">
+                <i data-lucide="plus" class="w-4 h-4"></i> 행 추가
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const taskList = document.getElementById('task-list');
+    const addRowBtn = document.getElementById('add-row-btn');
+    let rowCount = 0;
+
+    function createRow() {
+        const index = rowCount++;
+        const row = document.createElement('div');
+        row.className = 'flex items-stretch min-h-[60px] relative group';
+        row.innerHTML = `
+            <div class="w-[10%] border-r border-black flex items-center justify-center p-1 gap-1">
+                <label class="flex items-center space-x-1 cursor-pointer"><input type="checkbox" name="work_time_am_${index}" value="오전" class="form-checkbox h-4 w-4 text-indigo-600"> <span class="text-xs">오전</span></label>
+                <label class="flex items-center space-x-1 cursor-pointer"><input type="checkbox" name="work_time_pm_${index}" value="오후" class="form-checkbox h-4 w-4 text-indigo-600"> <span class="text-xs">오후</span></label>
+            </div>
+            <div class="w-[15%] border-r border-black"><textarea name="task_type_${index}" rows="2" class="w-full h-full p-1 resize-none focus:outline-none focus:bg-blue-50"></textarea></div>
+            <div class="w-[25%] border-r border-black"><textarea name="task_details_${index}" rows="2" class="w-full h-full p-1 resize-none focus:outline-none focus:bg-blue-50"></textarea></div>
+            <div class="w-[20%] border-r border-black"><textarea name="task_result_${index}" rows="2" class="w-full h-full p-1 resize-none focus:outline-none focus:bg-blue-50"></textarea></div>
+            <div class="w-[15%] border-r border-black"><textarea name="future_plan_${index}" rows="2" class="w-full h-full p-1 resize-none focus:outline-none focus:bg-blue-50"></textarea></div>
+            <div class="w-[15%]"><textarea name="notes_${index}" rows="2" class="w-full h-full p-1 resize-none focus:outline-none focus:bg-blue-50"></textarea></div>
+            <button type="button" class="delete-row-btn absolute right-1 top-1/2 -translate-y-1/2 bg-red-100 text-red-500 rounded-full p-1 opacity-0 group-hover:opacity-100 hover:bg-red-200 transition-opacity z-10">
+                <i data-lucide="minus" class="w-3 h-3"></i>
+            </button>
+        `;
+
+        // Add delete functionality
+        row.querySelector('.delete-row-btn').addEventListener('click', () => {
+            row.remove();
+        });
+
+        // Auto-resize textareas
+        row.querySelectorAll('textarea').forEach(textarea => {
+            textarea.addEventListener('input', () => {
+                textarea.style.height = 'auto';
+                textarea.style.height = (textarea.scrollHeight) + 'px';
+            });
+        });
+
+        taskList.appendChild(row);
+        lucide.createIcons();
+    }
+
+    addRowBtn.addEventListener('click', createRow);
+
+    // Initial rows
+    for (let i = 0; i < 3; i++) {
+        createRow();
+    }
+
+    // Set today's date
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    document.getElementById('work_date').value = `${yyyy}-${mm}-${dd}`;
+});
+</script>
+{% endblock %}

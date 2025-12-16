@@ -1,0 +1,37 @@
+{% extends "layout_new.html" %}
+{% block title %}보고서 - Facil-ERP{% endblock %}
+{% block page_title %}보고서{% endblock %}
+
+{% block content %}
+<div class="h-full flex flex-col">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-4">
+      <div class="flex flex-wrap gap-4 items-end">
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-1">기간 선택</label>
+          <div class="flex items-center gap-2">
+            <input type="date" class="border border-slate-300 rounded-lg p-1.5 text-sm">
+            <span class="text-slate-500">~</span>
+            <input type="date" class="border border-slate-300 rounded-lg p-1.5 text-sm">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-1">보고서 종류</label>
+          <select class="border border-slate-300 rounded-lg px-4 py-1.5 text-sm bg-white"><option>설비 예방 점검 보고서</option></select>
+        </div>
+        <button class="bg-slate-800 text-white px-5 py-1.5 rounded-lg text-sm font-medium hover:bg-slate-700">조회</button>
+      </div>
+    </div>
+
+    <div class="flex-1 bg-slate-200 rounded-xl border border-slate-300 p-8 flex items-center justify-center overflow-auto">
+        <div class="text-center">
+            <i data-lucide="file-text" class="w-16 h-16 mx-auto text-slate-400"></i>
+            <h3 class="mt-4 text-lg font-bold text-slate-600">준비 중인 기능입니다</h3>
+            <p class="mt-1 text-sm text-slate-500">조회 버튼을 누르면 여기에 보고서가 표시됩니다.</p>
+        </div>
+    </div>
+     <div class="mt-4 flex justify-end gap-2">
+      <button disabled class="flex items-center gap-2 bg-slate-400 text-white px-4 py-2 rounded shadow cursor-not-allowed"><i data-lucide="download" class="w-4 h-4"></i> PDF 저장</button>
+      <button disabled class="flex items-center gap-2 bg-slate-400 text-white px-4 py-2 rounded shadow cursor-not-allowed"><i data-lucide="printer" class="w-4 h-4"></i> 인쇄</button>
+    </div>
+</div>
+{% endblock %}

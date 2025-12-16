@@ -1,0 +1,44 @@
+{% extends "layout_new.html" %}
+{% block title %}외부업체 점검/작업 - Facil-ERP{% endblock %}
+{% block page_title %}외부업체 점검/작업 현황{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6 flex items-start space-x-3">
+        <i data-lucide="alert-circle" class="text-yellow-600 shrink-0 w-5 h-5"></i>
+        <div>
+            <p class="text-yellow-800 font-bold text-sm">금일 출입 예정 업체</p>
+            <p class="text-yellow-700 text-sm">한전KPS (배전반 점검, 14:00~), 세스코 (방역, 16:00~)</p>
+        </div>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="border-b border-slate-200 bg-slate-50">
+                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase">업체명</th>
+                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase">방문목적</th>
+                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase">방문일시</th>
+                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase">인솔자</th>
+                    <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase">작업허가서</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="hover:bg-slate-50">
+                    <td class="px-6 py-4 text-sm font-medium">한전KPS</td>
+                    <td class="px-6 py-4 text-sm">정기 배전반 점검</td>
+                    <td class="px-6 py-4 text-sm">2025-12-16 14:00</td>
+                    <td class="px-6 py-4 text-sm">최지은</td>
+                    <td class="px-6 py-4"><span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full font-medium">승인완료</span></td>
+                </tr>
+                 <tr class="hover:bg-slate-50">
+                    <td class="px-6 py-4 text-sm font-medium">세스코</td>
+                    <td class="px-6 py-4 text-sm">정기 방역 작업</td>
+                    <td class="px-6 py-4 text-sm">2025-12-16 16:00</td>
+                    <td class="px-6 py-4 text-sm">김민준</td>
+                    <td class="px-6 py-4"><span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full font-medium">대기</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

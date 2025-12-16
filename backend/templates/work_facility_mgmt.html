@@ -1,0 +1,35 @@
+{% extends "layout_new.html" %}
+{% block title %}설비 관리현황 - Facil-ERP{% endblock %}
+{% block page_title %}설비 관리현황{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+    <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold">설비 유지보수 이력</h3>
+        <input type="month" class="border border-slate-300 rounded-lg px-2 py-1 text-sm">
+    </div>
+    <div class="border-l-2 border-slate-200 pl-6 space-y-8">
+        <!-- Timeline Item 1 -->
+        <div class="relative">
+            <div class="absolute -left-[34px] top-1 w-4 h-4 bg-indigo-500 rounded-full border-4 border-white"></div>
+            <p class="text-sm text-slate-400 mb-1">2025-12-20</p>
+            <h4 class="font-bold text-slate-800">2호기 유압유 교체 및 필터 청소</h4>
+            <p class="text-sm text-slate-600 mt-1">작업자: 시설팀 전원 | 소요시간: 4H</p>
+        </div>
+        <!-- Timeline Item 2 -->
+        <div class="relative">
+            <div class="absolute -left-[34px] top-1 w-4 h-4 bg-slate-300 rounded-full border-4 border-white"></div>
+            <p class="text-sm text-slate-400 mb-1">2025-12-15</p>
+            <h4 class="font-bold text-slate-800">1호기 컨트롤러 펌웨어 업데이트</h4>
+            <p class="text-sm text-slate-600 mt-1">작업자: 제조사 엔지니어</p>
+        </div>
+        <!-- Timeline Item 3 -->
+        <div class="relative">
+            <div class="absolute -left-[34px] top-1 w-4 h-4 bg-slate-300 rounded-full border-4 border-white"></div>
+            <p class="text-sm text-slate-400 mb-1">2025-11-28</p>
+            <h4 class="font-bold text-slate-800">공기 압축기 에어 필터 교체</h4>
+            <p class="text-sm text-slate-600 mt-1">작업자: 박준형</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

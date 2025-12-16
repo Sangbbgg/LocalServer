@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Facil-ERP{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.min.css') }}">
+    <script src="{{ url_for('static', filename='js/lucide.min.js') }}"></script>
+</head>
+<body class="bg-slate-100 font-sans text-slate-900">
+
+<div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <div class="w-64 bg-slate-900 text-white flex-col h-full fixed left-0 top-0 z-10 hidden md:flex">
+        <div class="p-6 flex items-center space-x-3 border-b border-slate-700">
+            <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center font-bold text-xl">F</div>
+            <span class="text-xl font-bold tracking-tight">Facil-ERP</span>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1 px-3" id="sidebar-menu">
+                <!-- 대시보드 -->
+                <li>
+                    <a href="{{ url_for('index') }}" class="w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors duration-200 text-slate-400 hover:bg-slate-800 hover:text-white {% if request.path == url_for('index') %}bg-indigo-600 text-white shadow-md{% endif %}">
+                        <div class="flex items-center space-x-3">
+                            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                            <span class="font-medium">대시보드</span>
+                        </div>
+                    </a>
+                </li>
+                
+                <!-- 업무관리 -->
+                <li class="menu-item">
+                    <button class="menu-toggle w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors duration-200 text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <div class="flex items-center space-x-3">
+                            <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                            <span class="font-medium">업무관리</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 chevron-icon"></i>
+                    </button>
+                    <ul class="submenu mt-1 ml-4 border-l-2 border-slate-700 pl-2 space-y-1 hidden">
+                        <li><a href="{{ url_for('work_daily') }}" class="menu-link w-full flex items-center space-x-3 px-4 py-2 rounded-md text-sm transition-colors text-slate-500 hover:text-slate-300 {% if 'work/daily' in request.path %}text-indigo-400 font-semibold bg-slate-800{% endif %}"><i data-lucide="calendar" class="w-4 h-4"></i><span>일일업무</span></a></li>
+                        <li><a href="{{ url_for('work_weekly') }}" class="menu-link w-full flex items-center space-x-3 px-4 py-2 rounded-md text-sm transition-colors text-slate-500 hover:text-slate-300 {% if 'work/weekly' in request.path %}text-indigo-400 font-semibold bg-slate-800{% endif %}"><i data-lucide="calendar-days" class="w-4 h-4"></i><span>주간업무</span></a></li>
+                        <li><a href="{{ url_for('work_external_task') }}" class="menu-link w-full flex items-center space-x-3 px-4 py-2 rounded-md text-sm transition-colors text-slate-500 hover:text-slate-300 {% if 'work/external' in request.path %}text-indigo-400 font-semibold bg-slate-800{% endif %}"><i data-lucide="truck" class="w-4 h-4"></i><span>외부업체 점검/작업</span></a></li>
+                    </ul>
+                </li>
+
+                <!-- 설비관리 -->
+                <li class="menu-item">
+                    <button class="menu-toggle w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors duration-200 text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <div class="flex items-center space-x-3">
+                           <i data-lucide="wrench" class="w-5 h-5"></i>
+                           <span class="font-medium">설비관리</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 chevron-icon"></i>
+                    </button>
+                    <ul class="submenu mt-1 ml-4 border-l-2 border-slate-700 pl-2 space-y-1 hidden">
+                        <li><a href="{{ url_for('work_facility_status') }}" class="menu-link w-full flex items-center space-x-3 px-4 py-2 rounded-md text-sm transition-colors text-slate-500 hover:text-slate-300 {% if 'facility/status' in request.path %}text-indigo-400 font-semibold bg-slate-800{% endif %}"><i data-lucide="activity" class="w-4 h-4"></i><span>설비현황</span></a></li>
+                        <li><a href="{{ url_for('work_facility_specs') }}" class="menu-link w-full flex items-center space-x-3 px-4 py-2 rounded-md text-sm transition-colors text-slate-500 hover:text-slate-300 {% if 'facility/specs' in request.path %}text-indigo-400 font-semibold bg-slate-800{% endif %}"><i data-lucide="file-text" class="w-4 h-4"></i><span>설비 제원현황</span></a></li>
+                        <li><a href="{{ url_for('work_facility_mgmt') }}" class="menu-link w-full flex items-center space-x-3 px-4 py-2 rounded-md text-sm transition-colors text-slate-500 hover:text-slate-300 {% if 'facility/mgmt' in request.path %}text-indigo-400 font-semibold bg-slate-800{% endif %}"><i data-lucide="settings" class="w-4 h-4"></i><span>설비 관리현황</span></a></li>
+                    </ul>
+                </li>
+                
+                <!-- 예방점검현황 -->
+                <li class="menu-item">
+                     <button class="menu-toggle w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors duration-200 text-slate-400 hover:bg-slate-800 hover:text-white">
+                        <div class="flex items-center space-x-3">
+                           <i data-lucide="clipboard-check" class="w-5 h-5"></i>
+                           <span class="font-medium">예방점검현황</span>
+                        </div>
+                         <i data-lucide="chevron-right" class="w-4 h-4 chevron-icon"></i>
+                    </button>
+                    <ul class="submenu mt-1 ml-4 border-l-2 border-slate-700 pl-2 space-y-1 hidden">
+                        <li><a href="{{ url_for('work_inspection_single') }}" class="menu-link w-full flex items-center space-x-3 px-4 py-2 rounded-md text-sm transition-colors text-slate-500 hover:text-slate-300 {% if 'inspection/single' in request.path %}text-indigo-400 font-semibold bg-slate-800{% endif %}"><i data-lucide="file-plus" class="w-4 h-4"></i><span>점검기록등록(단일)</span></a></li>
+                        <li><a href="{{ url_for('work_inspection_multi') }}" class="menu-link w-full flex items-center space-x-3 px-4 py-2 rounded-md text-sm transition-colors text-slate-500 hover:text-slate-300 {% if 'inspection/multi' in request.path %}text-indigo-400 font-semibold bg-slate-800{% endif %}"><i data-lucide="files" class="w-4 h-4"></i><span>점검기록등록(복수)</span></a></li>
+                        <li><a href="{{ url_for('report_page') }}" class="menu-link w-full flex items-center space-x-3 px-4 py-2 rounded-md text-sm transition-colors text-slate-500 hover:text-slate-300 {% if 'report' in request.path %}text-indigo-400 font-semibold bg-slate-800{% endif %}"><i data-lucide="printer" class="w-4 h-4"></i><span>점검보고서 출력</span></a></li>
+                    </ul>
+                </li>
+                
+                <!-- 시스템 설정 -->
+                 <li>
+                    <a href="{{ url_for('settings') }}" class="w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors duration-200 text-slate-400 hover:bg-slate-800 hover:text-white {% if request.path == url_for('settings') %}bg-indigo-600 text-white shadow-md{% endif %}">
+                        <div class="flex items-center space-x-3">
+                            <i data-lucide="settings" class="w-5 h-5"></i>
+                            <span class="font-medium">시스템 설정</span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col md:ml-64 transition-all duration-300">
+        <!-- Header -->
+        <header class="bg-white h-16 border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-10">
+            <div class="flex items-center">
+                <button class="md:hidden mr-4 text-slate-500">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h2 class="text-xl font-bold text-slate-800">{% block page_title %}페이지 제목{% endblock %}</h2>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div class="relative hidden sm:block">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                    <input type="text" placeholder="검색..." class="pl-10 pr-4 py-2 border border-slate-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64">
+                </div>
+                <button class="relative p-2 text-slate-500 hover:bg-slate-100 rounded-full">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <main class="flex-1 p-6 overflow-y-auto">
+            <div class="max-w-7xl mx-auto h-full">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    lucide.createIcons();
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        // Function to open the correct menu based on URL
+        function openActiveMenu() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.submenu .menu-link').forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    const submenu = link.closest('.submenu');
+                    const toggle = submenu.previousElementSibling;
+                    const chevron = toggle.querySelector('.chevron-icon');
+
+                    submenu.classList.remove('hidden');
+                    toggle.classList.add('text-white');
+                    chevron.classList.add('rotate-90');
+                }
+            });
+        }
+        
+        // Add click listener for toggling
+        menuItems.forEach(item => {
+            const toggle = item.querySelector('.menu-toggle');
+            if (toggle) {
+                toggle.addEventListener('click', () => {
+                    const submenu = item.querySelector('.submenu');
+                    const chevron = toggle.querySelector('.chevron-icon');
+
+                    submenu.classList.toggle('hidden');
+                    chevron.classList.toggle('rotate-90');
+                });
+            }
+        });
+        
+        // Open active menu on page load
+        openActiveMenu();
+    });
+</script>
+
+</body>
+</html>

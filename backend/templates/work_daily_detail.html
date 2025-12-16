@@ -1,0 +1,91 @@
+{% extends "layout_new.html" %}
+{% block title %}일지 상세 보기 - Facil-ERP{% endblock %}
+{% block page_title %}업무관리 &gt; 일일업무 &gt; 상세 보기{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center">
+    <!-- Toolbar -->
+    <div class="w-full max-w-[210mm] flex justify-between items-center mb-4">
+        <a href="{{ url_for('work_daily') }}" class="flex items-center gap-2 bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded shadow-sm hover:bg-slate-50 text-sm font-bold">
+            <i data-lucide="list" class="w-4 h-4"></i> 목록
+        </a>
+        <div class="flex space-x-2">
+            <button disabled class="flex items-center gap-2 bg-gray-400 text-white px-4 py-2 rounded shadow text-sm font-bold cursor-not-allowed">
+                <i data-lucide="file-edit" class="w-4 h-4"></i> 수정
+            </button>
+            <button class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 text-sm font-bold">
+                <i data-lucide="download" class="w-4 h-4"></i> HWP 다운로드
+            </button>
+        </div>
+    </div>
+
+    <!-- A4 Paper Form Container -->
+    <div class="bg-white w-full max-w-[210mm] min-h-[297mm] shadow-lg border border-slate-300 p-[15mm] relative text-black">
+        {% if log %}
+        <!-- Title -->
+        <h1 class="text-3xl font-bold text-center mb-8 underline decoration-2 underline-offset-4">
+            유지보수 수행 일지
+        </h1>
+
+        <!-- Top Section: Date & Signature -->
+        <div class="flex justify-between items-end mb-4">
+            <div class="text-lg font-bold mb-2 flex items-center">
+                <span>{{ log['work_date'] }}</span>
+            </div>
+            <table class="border-collapse border border-black w-32 text-center">
+                <tbody>
+                    <tr>
+                        <td class="bg-gray-100 border border-black p-1 font-bold text-sm">담 당</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-black h-16 align-middle text-gray-800 text-sm">(서명 생략)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Main Table Content -->
+        <div class="border-2 border-black">
+            <div class="flex border-b-2 border-black bg-gray-100 text-center font-bold">
+                <div class="w-[10%] py-2 border-r border-black">시간</div>
+                <div class="w-[15%] py-2 border-r border-black">업무구분</div>
+                <div class="w-[25%] py-2 border-r border-black">업무처리내용</div>
+                <div class="w-[20%] py-2 border-r border-black">업무처리결과</div>
+                <div class="w-[15%] py-2 border-r border-black">향후일정</div>
+                <div class="w-[15%] py-2">비고</div>
+            </div>
+
+            <div class="divide-y divide-black">
+                {% if tasks %}
+                    {% for task in tasks %}
+                    <div class="flex items-stretch min-h-[60px]">
+                        <div class="w-[10%] border-r border-black flex items-center justify-center p-1 text-sm">{{ task['work_time'] | replace(',', ' ') }}</div>
+                        <div class="w-[15%] border-r border-black p-2 text-sm whitespace-pre-wrap">{{ task['task_type'] }}</div>
+                        <div class="w-[25%] border-r border-black p-2 text-sm whitespace-pre-wrap">{{ task['task_details'] }}</div>
+                        <div class="w-[20%] border-r border-black p-2 text-sm whitespace-pre-wrap">{{ task['task_result'] }}</div>
+                        <div class="w-[15%] border-r border-black p-2 text-sm whitespace-pre-wrap">{{ task['future_plan'] }}</div>
+                        <div class="w-[15%] p-2 text-sm whitespace-pre-wrap">{{ task['notes'] }}</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-10 text-slate-500">
+                        수행된 업무가 없습니다.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-20">
+            <h2 class="text-xl font-bold text-red-500">오류</h2>
+            <p class="text-slate-600 mt-2">해당 ID의 로그를 찾을 수 없습니다.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<script>
+    // This script block is needed to activate the icons
+    document.addEventListener('DOMContentLoaded', function () {
+        lucide.createIcons();
+    });
+</script>
+{% endblock %}

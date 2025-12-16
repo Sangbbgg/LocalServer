@@ -1,0 +1,54 @@
+{% extends "layout_new.html" %}
+{% block title %}설비현황 - Facil-ERP{% endblock %}
+{% block page_title %}설비현황{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Card 1 -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-slate-100 p-3 rounded-lg">
+                <i data-lucide="wrench" class="w-6 h-6 text-slate-600"></i>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">가동중</span>
+        </div>
+        <h4 class="text-lg font-bold text-slate-800 mb-1">사출성형기 1호</h4>
+        <p class="text-sm text-slate-500 mb-4">A동 생산라인</p>
+        <div class="flex items-center text-xs text-slate-400 space-x-4">
+            <span class="flex items-center"><i data-lucide="activity" class="w-3.5 h-3.5 mr-1"></i> 85% 부하</span>
+            <span class="flex items-center"><i data-lucide="clock" class="w-3.5 h-3.5 mr-1"></i> 120h 가동</span>
+        </div>
+    </div>
+    <!-- Card 2 -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-slate-100 p-3 rounded-lg">
+                <i data-lucide="wrench" class="w-6 h-6 text-slate-600"></i>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-700">점검중</span>
+        </div>
+        <h4 class="text-lg font-bold text-slate-800 mb-1">사출성형기 2호</h4>
+        <p class="text-sm text-slate-500 mb-4">A동 생산라인</p>
+        <div class="flex items-center text-xs text-slate-400 space-x-4">
+            <span class="flex items-center"><i data-lucide="activity" class="w-3.5 h-3.5 mr-1"></i> 0% 부하</span>
+            <span class="flex items-center"><i data-lucide="clock" class="w-3.5 h-3.5 mr-1"></i> 0h 가동</span>
+        </div>
+    </div>
+    <!-- Card 3 -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow cursor-pointer">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-slate-100 p-3 rounded-lg">
+                <i data-lucide="wrench" class="w-6 h-6 text-slate-600"></i>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">가동중</span>
+        </div>
+        <h4 class="text-lg font-bold text-slate-800 mb-1">공기 압축기</h4>
+        <p class="text-sm text-slate-500 mb-4">유틸리티동</p>
+        <div class="flex items-center text-xs text-slate-400 space-x-4">
+            <span class="flex items-center"><i data-lucide="activity" class="w-3.5 h-3.5 mr-1"></i> 92% 부하</span>
+            <span class="flex items-center"><i data-lucide="clock" class="w-3.5 h-3.5 mr-1"></i> 720h 가동</span>
+        </div>
+    </div>
+    <!-- Add more cards as needed -->
+</div>
+{% endblock %}

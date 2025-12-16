@@ -1,0 +1,27 @@
+# Node.js
+node_modules/
+dist/
+build/
+.env
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Database
+backend/database.db
+
+# Uploaded/Processed files
+backend/uploads/
+backend/processed/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Executables
+*.exe
+
+# Temporary files
+새 텍스트 문서.html

@@ -1,0 +1,57 @@
+{% extends "layout_new.html" %}
+{% block title %}일일업무 - Facil-ERP{% endblock %}
+{% block page_title %}업무관리 &gt; 일일업무{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h3 class="text-lg font-bold flex items-center gap-2">
+            <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+            일일업무일지 목록
+        </h3>
+        <a href="{{ url_for('new_daily_log') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-indigo-700">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            새 일지 작성
+        </a>
+    </div>
+    <div class="overflow-x-auto">
+        <div class="min-w-full inline-block align-middle">
+            <div class="border rounded-lg overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-slate-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                일자
+                            </th>
+                             <th scope="col" class="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                작업
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% if logs %}
+                            {% for log in logs %}
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800 flex items-center gap-2">
+                                    <i data-lucide="calendar" class="w-4 h-4 text-slate-400"></i>
+                                    {{ log[1] }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="{{ url_for('view_daily_log', log_id=log[0]) }}" class="text-indigo-600 hover:text-indigo-900">상세보기</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="2" class="text-center py-10 text-slate-500">
+                                    작성된 일지가 없습니다.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
