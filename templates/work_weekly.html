@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Weekly Report - ERP System{% endblock %}
+{% block content %}
+    <h2>🗓️ 주간 업무 보고</h2>
+    <div class="upload-box">
+        <p>주간 업무 보고서 파일을 업로드합니다.</p>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="category" value="weekly">
+            <input type="file" name="file" required>
+            <br><br>
+            <button type="submit">등록</button>
+        </form>
+    </div>
+{% endblock %}

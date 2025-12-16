@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}일일 업무 일지 - ERP System{% endblock %}
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>📅 일일 업무 일지 목록</h2>
+        <a href="{{ url_for('new_daily_log') }}" style="background-color: #3498db; color: white; padding: 10px 15px; border-radius: 4px; text-decoration: none;">+ 새 일지 작성</a>
+    </div>
+
+    <table style="margin-top: 20px;">
+        <thead>
+            <tr>
+                <th style="width: 70%;">업무 날짜</th>
+                <th>작업</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if logs %}
+                {% for log in logs %}
+                <tr>
+                    <td>{{ log[1] }}</td>
+                    <td>
+                        <a href="{{ url_for('view_daily_log', log_id=log[0]) }}">상세보기</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="2">작성된 일지가 없습니다.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

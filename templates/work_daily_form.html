@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+{% block title %}새 일지 작성 - ERP System{% endblock %}
+{% block content %}
+<style>
+    .task-table input[type="text"], .task-table textarea {
+        width: 95%;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+    .task-table textarea {
+        height: 40px;
+        resize: vertical;
+    }
+    .task-table th, .task-table td {
+        vertical-align: middle;
+        text-align: center;
+    }
+</style>
+
+<form action="{{ url_for('add_daily_log') }}" method="post">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>📅 새 일지 작성</h2>
+        <div>
+            <a href="{{ url_for('work_daily') }}" style="text-decoration: none; color: #555; margin-right: 15px;">취소</a>
+            <button type="submit">💾 일지 저장</button>
+        </div>
+    </div>
+
+    <div class="form-box" style="margin-top: 20px;">
+        <label for="work_date"><strong>업무 날짜</strong></label>
+        <input type="date" id="work_date" name="work_date" required>
+    </div>
+
+    <table class="task-table" style="margin-top: 20px;">
+        <thead>
+            <tr>
+                <th style="width: 10%;">오전/오후</th>
+                <th style="width: 15%;">업무구분</th>
+                <th style="width: 25%;">업무처리내용</th>
+                <th style="width: 20%;">업무처리결과</th>
+                <th style="width: 15%;">향후일정</th>
+                <th style="width: 10%;">비고</th>
+                <th style="width: 5%;">삭제</th>
+            </tr>
+        </thead>
+        <tbody id="task-body">
+            <!-- 자바스크립트로 행이 추가될 부분 -->
+        </tbody>
+    </table>
+
+    <button type="button" id="add-row-btn" style="margin-top: 15px;">+ 행 추가</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tableBody = document.getElementById('task-body');
+        const addRowBtn = document.getElementById('add-row-btn');
+        let rowCount = 0;
+
+        function addRow() {
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>
+                    <input type="checkbox" name="work_time_am_${rowCount}" value="오전"> 오전<br>
+                    <input type="checkbox" name="work_time_pm_${rowCount}" value="오후"> 오후
+                </td>
+                <td><input type="text" name="task_type_${rowCount}"></td>
+                <td><textarea name="task_details_${rowCount}"></textarea></td>
+                <td><input type="text" name="task_result_${rowCount}"></td>
+                <td><input type="text" name="future_plan_${rowCount}"></td>
+                <td><input type="text" name="notes_${rowCount}"></td>
+                <td><button type="button" class="delete-row-btn">삭제</button></td>
+            `;
+            tableBody.appendChild(newRow);
+            rowCount++;
+        }
+
+        tableBody.addEventListener('click', function (e) {
+            if (e.target && e.target.classList.contains('delete-row-btn')) {
+                e.target.closest('tr').remove();
+            }
+        });
+
+        addRowBtn.addEventListener('click', addRow);
+
+        // 기본으로 3행 추가
+        for (let i = 0; i < 3; i++) {
+            addRow();
+        }
+        
+        // 오늘 날짜를 기본값으로 설정
+        document.getElementById('work_date').valueAsDate = new Date();
+    });
+</script>
+{% endblock %}
