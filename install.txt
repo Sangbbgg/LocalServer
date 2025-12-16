@@ -1,0 +1,63 @@
+사용자께서는 GitHub에서 프로젝트를 클론한 후 새 환경에서 프로젝트를 설정하는 방법을 묻고 있습니다. 이는 일반적인 설정 프로세스입니다.
+
+다음 단계에 대한 지침을 제공해야 합니다.
+
+저장소 클론.
+백엔드 설정 (Python 가상 환경 및 종속성).
+프론트엔드 설정 (Node.js 종속성).
+start-servers.bat 파일 실행.
+이러한 지침을 명확하게 구성하겠습니다.
+
+계획:
+
+저장소 클론: git clone 명령을 제공합니다.
+백엔드 설정:
+backend 디렉토리로 이동합니다.
+Python 가상 환경을 생성합니다.
+가상 환경을 활성화합니다.
+Python 종속성을 설치합니다 (flask-cors를 명시적으로 언급하고, 실제 프로젝트에는 requirements.txt가 있는지 확인하도록 조언합니다).
+프론트엔드 설정:
+frontend 디렉토리로 이동합니다.
+npm install을 사용하여 Node.js 종속성을 설치합니다.
+서버 시작:
+프로젝트 루트로 다시 이동합니다.
+start-servers.bat를 실행합니다. 클론한 프로젝트를 다른 환경에서 실행하기 위한 과정을 아래에 설명합니다.
+프로젝트 설정 및 실행 가이드
+1. 프로젝트 클론 (Clone the Repository)
+
+새로운 환경에서 터미널(명령 프롬프트 또는 PowerShell)을 엽니다.
+프로젝트를 저장할 디렉토리로 이동한 후, 다음 명령어를 사용하여 Git 저장소를 클론합니다:
+git clone https://github.com/Sangbbgg/LocalServer.git
+cd LocalServer
+2. 백엔드 설정 (Python/Flask)
+
+backend 디렉토리로 이동합니다:
+cd backend
+Python 가상 환경 생성:
+python이 시스템 PATH에 설정되어 있는지 확인합니다.
+다음 명령어로 venv라는 이름의 가상 환경을 생성합니다:
+python -m venv venv
+가상 환경 활성화:
+.\venv\Scripts\activate
+(터미널 프롬프트 앞에 (venv)가 나타나면 활성화된 것입니다.)
+필요한 Python 패키지 설치:
+현재 프로젝트에는 backend/requirements.txt 파일이 없으므로, 수동으로 flask-cors를 설치합니다. 만약 requirements.txt가 있다면 pip install -r requirements.txt를 사용합니다.
+pip install flask-cors
+백엔드 설정이 완료되면, LocalServer 프로젝트의 루트 디렉토리로 다시 돌아갑니다:
+cd ..
+3. 프론트엔드 설정 (React/Vite)
+
+frontend 디렉토리로 이동합니다:
+cd frontend
+Node.js 패키지 설치:
+npm이 설치되어 있는지 확인합니다.
+다음 명령어로 package.json에 정의된 모든 의존성 패키지를 설치합니다:
+npm install
+프론트엔드 설정이 완료되면, LocalServer 프로젝트의 루트 디렉토리로 다시 돌아갑니다:
+cd ..
+4. 서버 실행 (Start Servers)
+
+LocalServer 프로젝트의 루트 디렉토리(여기에는 start-servers.bat 파일이 있습니다)에서 다음 명령어를 실행합니다:
+start-servers.bat
+이 명령어는 백엔드(Flask) 서버와 프론트엔드(React) 서버를 각각 별도의 명령 프롬프트 창에서 동시에 시작할 것입니다.
+이 과정을 따르면 새로운 환경에서 프로젝트를 성공적으로 설정하고 실행할 수 있습니다.
