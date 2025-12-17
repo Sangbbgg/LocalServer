@@ -31,7 +31,8 @@ import {
   Circle,
   CheckCircle2,
   FileEdit,
-  Trash2 
+  Trash2,
+  Briefcase 
 } from 'lucide-react';
 
 // --- Mock Data & Constants ---
@@ -80,6 +81,35 @@ const MOCK_STATS = [
   { label: '안전 이슈', value: '0건', change: '정상', isPositive: true },
 ];
 
+// 2025-12-15 HWP 데이터 반영 (상세 내용 통합, 양호 -> 완료 변경)
+const DEC_15_DATA = {
+  section1: [
+    { 
+      id: 1, 
+      time: '오전',
+      isExternal: false,
+      title: '12월 예방점검', 
+      content: '- 본관ERP(4EA), 연료전지(23EA) 백신 업데이트 및 로그 백업', 
+      status: '진행중' 
+    },
+    { 
+      id: 2, 
+      time: '오후',
+      isExternal: false,
+      title: '네트워크 취약점 조치', 
+      content: '- 본관 알람서버1(SIC1DB) 방화벽 및 포트 제한 6건\n> 정상동작 확인시 알람서버2(SIC2DB) 동일 조치 예정\n- 1BL SYSTEM1 OA SVR 방화벽 조치\n> 보안팀 연계 포트관련 추가 조치 예정', 
+      status: '진행중' 
+    }
+  ],
+  section2: [
+    { id: 3, time: '', isExternal: false, title: '해당 사항 없음', content: '', status: '완료' }
+  ],
+  section3: [
+    { id: 4, time: '', isExternal: false, title: '특이 사항 없음', content: '', status: '완료' }
+  ],
+  note: ''
+};
+
 // 목록 보기용 샘플 데이터 (초기 데이터)
 const INITIAL_HISTORY_LIST = [
   { 
@@ -88,7 +118,8 @@ const INITIAL_HISTORY_LIST = [
     day: '목', 
     fullDate: '2025년 12월 18일 (목)', 
     createdAt: '2025-12-18 09:00', 
-    updatedAt: null 
+    updatedAt: null,
+    data: null
   },
   { 
     id: 106, 
@@ -96,7 +127,8 @@ const INITIAL_HISTORY_LIST = [
     day: '수', 
     fullDate: '2025년 12월 17일 (수)', 
     createdAt: '2025-12-17 08:50', 
-    updatedAt: '2025-12-17 16:30' 
+    updatedAt: '2025-12-17 16:30',
+    data: null
   },
   { 
     id: 105, 
@@ -104,7 +136,8 @@ const INITIAL_HISTORY_LIST = [
     day: '화', 
     fullDate: '2025년 12월 16일 (화)', 
     createdAt: '2025-12-16 09:10', 
-    updatedAt: null 
+    updatedAt: null,
+    data: null
   },
   { 
     id: 104, 
@@ -112,7 +145,8 @@ const INITIAL_HISTORY_LIST = [
     day: '월', 
     fullDate: '2025년 12월 15일 (월)', 
     createdAt: '2025-12-15 08:45', 
-    updatedAt: '2025-12-15 14:20' 
+    updatedAt: '2025-12-15 14:20',
+    data: DEC_15_DATA
   },
   { 
     id: 101, 
@@ -120,7 +154,8 @@ const INITIAL_HISTORY_LIST = [
     day: '일', 
     fullDate: '2025년 12월 14일 (일)', 
     createdAt: '2025-12-14 10:00', 
-    updatedAt: null 
+    updatedAt: null,
+    data: null
   },
   { 
     id: 102, 
@@ -128,7 +163,8 @@ const INITIAL_HISTORY_LIST = [
     day: '토', 
     fullDate: '2025년 12월 13일 (토)', 
     createdAt: '2025-12-13 09:30', 
-    updatedAt: null 
+    updatedAt: null,
+    data: null
   },
   { 
     id: 103, 
@@ -136,7 +172,8 @@ const INITIAL_HISTORY_LIST = [
     day: '금', 
     fullDate: '2025년 12월 12일 (금)', 
     createdAt: '2025-12-12 08:55', 
-    updatedAt: '2025-12-12 11:15' 
+    updatedAt: '2025-12-12 11:15',
+    data: null
   },
 ];
 
@@ -157,6 +194,32 @@ const formatDateWithDay = (dateStr) => {
   if (!dateStr) return '';
   const d = new Date(dateStr);
   return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 (${getDayName(dateStr)})`;
+};
+
+// --- Helper Components ---
+
+// 자동 높이 조절 Textarea 컴포넌트
+const AutoResizeTextarea = ({ value, onChange, placeholder, className }) => {
+  const textareaRef = useRef(null);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      // 높이 초기화 후 스크롤 높이만큼 설정
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [value]);
+
+  return (
+    <textarea
+      ref={textareaRef}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      className={className}
+      rows={1}
+    />
+  );
 };
 
 // --- Components ---
@@ -287,16 +350,17 @@ const DailyTaskView = () => {
   const today = new Date();
   const todayStr = today.toISOString().split('T')[0];
 
-  // 초기 폼 상태
+  // 초기 폼 상태 (content 통합, time/isExternal 추가)
   const initialFormState = {
     id: null,
     rawDate: todayStr, // input date value용
     date: formatDateWithDay(todayStr), // 표시용
     weather: '',
-    section1: [{ id: Date.now(), time: '', title: '', detail: '', status: '진행중' }],
-    section2: [{ id: Date.now() + 1, time: '', title: '', detail: '', status: '진행중' }],
-    section3: [{ id: Date.now() + 2, time: '', title: '', detail: '', status: '진행중' }],
-    note: ''
+    // 각 섹션 아이템: { time: 오전/오후, isExternal: 외부, title: 제목, content: 상세내용, status: 상태 }
+    section1: [{ id: Date.now(), time: '', isExternal: false, title: '', content: '', status: '진행중' }],
+    section2: [{ id: Date.now() + 1, time: '', isExternal: false, title: '', content: '', status: '진행중' }],
+    section3: [{ id: Date.now() + 2, time: '', isExternal: false, title: '', content: '', status: '진행중' }],
+    footerNote: ''
   };
 
   const [formData, setFormData] = useState(initialFormState);
@@ -304,8 +368,6 @@ const DailyTaskView = () => {
   // 날짜 변경 핸들러 (중복 체크)
   const handleDateChange = (e) => {
     const newDate = e.target.value;
-    
-    // 중복 체크: 이미 존재하는 날짜인지 확인 (수정 모드일 경우 자기 자신 제외)
     const isDuplicate = historyList.some(item => 
       item.date === newDate && item.id !== formData.id
     );
@@ -326,7 +388,7 @@ const DailyTaskView = () => {
   const addRow = (sectionKey) => {
     setFormData(prev => ({
       ...prev,
-      [sectionKey]: [...prev[sectionKey], { id: Date.now() + Math.random(), time: '', title: '', detail: '', status: '진행중' }]
+      [sectionKey]: [...prev[sectionKey], { id: Date.now() + Math.random(), time: '', isExternal: false, title: '', content: '', status: '진행중' }]
     }));
   };
 
@@ -348,41 +410,36 @@ const DailyTaskView = () => {
     }));
   };
 
-  // Textarea 자동 높이 조절
-  const handleTextareaResize = (e) => {
-    e.target.style.height = 'auto';
-    e.target.style.height = `${e.target.scrollHeight}px`;
-  };
-
-  // 목록에서 항목 클릭 (수정 모드 진입)
+  // 목록에서 항목 클릭
   const handleItemClick = (log) => {
+    const loadData = log.data || initialFormState;
     setFormData({
-      ...initialFormState,
+      ...initialFormState, 
+      ...loadData,
       id: log.id,
       rawDate: log.date,
       date: log.fullDate, 
-      // 실제로는 여기서 log 데이터를 기반으로 내용을 채워야 함
     });
     setIsEditMode(true);
     setViewMode('write');
   };
 
-  // 항목 삭제 핸들러
+  // 항목 삭제
   const handleDelete = (e, id) => {
-    e.stopPropagation(); // 부모(tr) 클릭 이벤트 전파 중단
+    e.stopPropagation();
     if (window.confirm('정말로 이 일지를 삭제하시겠습니까?')) {
       setHistoryList(prev => prev.filter(item => item.id !== id));
     }
   };
 
-  // 새 일지 작성 클릭 (작성 모드 진입)
+  // 새 일지 작성
   const handleNewClick = () => {
     setFormData(initialFormState);
     setIsEditMode(false);
     setViewMode('write');
   };
 
-  // 저장/수정 버튼 클릭
+  // 저장/수정
   const handleSave = () => {
     const msg = isEditMode ? "수정되었습니다." : "저장되었습니다.";
     alert(msg);
@@ -573,23 +630,22 @@ const DailyTaskView = () => {
                 // Determine active states for time buttons
                 const isAm = row.time === '오전' || row.time === '종일';
                 const isPm = row.time === '오후' || row.time === '종일';
+                const isExternal = row.isExternal;
 
                 const toggleTime = (type) => {
                   let newTime = row.time;
                   if (type === 'am') {
-                    if (isAm) {
-                      newTime = isPm ? '오후' : '';
-                    } else {
-                      newTime = isPm ? '종일' : '오전';
-                    }
+                    if (isAm) { newTime = isPm ? '오후' : ''; } 
+                    else { newTime = isPm ? '종일' : '오전'; }
                   } else {
-                    if (isPm) {
-                      newTime = isAm ? '오전' : '';
-                    } else {
-                      newTime = isAm ? '종일' : '오후';
-                    }
+                    if (isPm) { newTime = isAm ? '오전' : ''; } 
+                    else { newTime = isAm ? '종일' : '오후'; }
                   }
                   updateRow(section.key, row.id, 'time', newTime);
+                };
+                
+                const toggleExternal = () => {
+                   updateRow(section.key, row.id, 'isExternal', !isExternal);
                 };
 
                 return (
@@ -598,48 +654,62 @@ const DailyTaskView = () => {
                     <div className="w-[85%] flex border-r border-black">
                       
                       {/* 1. Time Column (Merged Row) */}
-                      <div className="w-[110px] flex flex-row justify-center items-center border-r border-gray-300 bg-slate-50 p-2 gap-3 shrink-0 select-none">
+                      <div className="w-[110px] flex flex-col justify-center items-center border-r border-gray-300 bg-slate-50 p-2 gap-2 shrink-0 select-none">
+                        {/* AM/PM Buttons Row */}
+                        <div className="flex gap-3">
+                          <button 
+                            onClick={() => toggleTime('am')}
+                            className="flex flex-col items-center gap-1 cursor-pointer focus:outline-none group/btn"
+                          >
+                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${isAm ? 'border-blue-600 bg-blue-600' : 'border-slate-400 bg-white'}`}>
+                              {isAm && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                            </div>
+                            <span className={`text-xs font-bold ${isAm ? 'text-blue-700' : 'text-slate-500'}`}>오전</span>
+                          </button>
+                          
+                          <button 
+                            onClick={() => toggleTime('pm')}
+                            className="flex flex-col items-center gap-1 cursor-pointer focus:outline-none group/btn"
+                          >
+                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${isPm ? 'border-blue-600 bg-blue-600' : 'border-slate-400 bg-white'}`}>
+                              {isPm && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                            </div>
+                            <span className={`text-xs font-bold ${isPm ? 'text-blue-700' : 'text-slate-500'}`}>오후</span>
+                          </button>
+                        </div>
+
+                        {/* External Button (Separate) */}
                         <button 
-                          onClick={() => toggleTime('am')}
-                          className="flex flex-col items-center gap-1 cursor-pointer focus:outline-none group/btn"
+                          onClick={toggleExternal}
+                          className={`flex items-center gap-1.5 px-2 py-1 rounded border transition-colors w-full justify-center mt-1
+                            ${isExternal ? 'bg-orange-100 border-orange-300 text-orange-800' : 'bg-white border-slate-300 text-slate-500 hover:bg-slate-100'}
+                          `}
                         >
-                          <div className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${isAm ? 'border-blue-600 bg-blue-600' : 'border-slate-400 bg-white'}`}>
-                            {isAm && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                          <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center shrink-0 ${isExternal ? 'border-orange-600 bg-orange-600' : 'border-slate-400 bg-white'}`}>
+                              {isExternal && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                           </div>
-                          <span className={`text-xs font-bold ${isAm ? 'text-blue-700' : 'text-slate-500'}`}>오전</span>
-                        </button>
-                        
-                        <button 
-                          onClick={() => toggleTime('pm')}
-                          className="flex flex-col items-center gap-1 cursor-pointer focus:outline-none group/btn"
-                        >
-                          <div className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${isPm ? 'border-blue-600 bg-blue-600' : 'border-slate-400 bg-white'}`}>
-                            {isPm && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
-                          </div>
-                          <span className={`text-xs font-bold ${isPm ? 'text-blue-700' : 'text-slate-500'}`}>오후</span>
+                          <span className="text-xs font-bold whitespace-nowrap">외부점검</span>
                         </button>
                       </div>
 
                       {/* 2. Content Column */}
                       <div className="flex-1 flex flex-col">
                         {/* Title Row */}
-                        <div className="border-b border-gray-300 p-2 flex items-center h-[40px]">
+                        <div className="border-b border-gray-300 p-2 flex items-center min-h-[36px]">
                            <input 
                              className="w-full font-bold focus:outline-none focus:bg-blue-50 bg-transparent placeholder-gray-400 text-black px-1"
                              value={row.title}
                              onChange={(e) => updateRow(section.key, row.id, 'title', e.target.value)}
-                             placeholder="제목"
+                             placeholder="제목 (예: 12월 예방점검)"
                            />
                         </div>
-                        {/* Detail Row (Auto-expanding) */}
-                        <div className="flex-1 p-2 flex items-start h-auto">
-                           <textarea 
-                             rows={1}
-                             onInput={handleTextareaResize}
-                             className="w-full h-full resize-none focus:outline-none focus:bg-blue-50 text-sm leading-relaxed bg-transparent overflow-hidden placeholder-gray-400 px-1"
-                             value={row.detail}
-                             onChange={(e) => updateRow(section.key, row.id, 'detail', e.target.value)}
-                             placeholder="상세 내용을 입력하세요"
+                        {/* Detail Row (Auto-expanding, Single Area) */}
+                        <div className="flex-1 p-2 flex flex-col h-auto gap-2">
+                           <AutoResizeTextarea 
+                             className="w-full h-full resize-none focus:outline-none focus:bg-blue-50 text-sm leading-relaxed bg-transparent overflow-hidden placeholder-gray-400 px-1 whitespace-pre-wrap"
+                             value={row.content}
+                             onChange={(e) => updateRow(section.key, row.id, 'content', e.target.value)}
+                             placeholder="- 상세 내용&#13;&#10;> 비고 사항"
                            />
                         </div>
                       </div>
@@ -686,11 +756,11 @@ const DailyTaskView = () => {
         {/* Footer: 특이사항 */}
         <div className="mt-4 border-2 border-black min-h-[150px] p-2">
           <div className="font-bold mb-2">【특이 사항】</div>
-          <textarea 
+          <AutoResizeTextarea 
             className="w-full h-full min-h-[100px] resize-none focus:outline-none bg-transparent leading-relaxed"
             placeholder="특이사항을 입력하세요."
-            value={formData.note}
-            onChange={(e) => setFormData(p => ({...p, note: e.target.value}))}
+            value={formData.footerNote}
+            onChange={(e) => setFormData(p => ({...p, footerNote: e.target.value}))}
           />
         </div>
 
